@@ -1,5 +1,6 @@
 import psycopg2
 from psycopg2.extras import RealDictCursor
+
 from .settings import *
 
 
@@ -11,12 +12,11 @@ def get_db_connection():
         # database=DATABASE_CONFIG['NAME'],
         # user=DATABASE_CONFIG['USER'],
         # password=DATABASE_CONFIG['PASSWORD']
-
         host=DB_HOST,
         port=DB_PORT,
         database=DB_NAME,
         user=DB_USER,
-        password=DB_PASSWORD
+        password=DB_PASSWORD,
     )
     return conn
 
@@ -25,9 +25,10 @@ def init_db():
     """Initialize database tables"""
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+
     # Create vehicles table
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS vehicles (
             id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
@@ -35,10 +36,12 @@ def init_db():
             rent_rate DECIMAL(10, 2) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    ''')
-    
+    """
+    )
+
     # Create users table
-    cursor.execute('''
+    cursor.execute(
+        """
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username VARCHAR(255) NOT NULL UNIQUE,
@@ -46,8 +49,9 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (vehicle_id) REFERENCES vehicles(id) ON DELETE SET NULL
         )
-    ''')
-    
+    """
+    )
+
     conn.commit()
     cursor.close()
     conn.close()

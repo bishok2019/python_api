@@ -11,19 +11,21 @@ from core.serializers import UserSerializer, VehicleSerializer
 class VehicleListApiView(BaseListApiView):
     """Handle list operations for vehicles"""
 
-    def get(self, request):
-        """GET /api/vehicles - List all vehicles"""
-        conn = self.get_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM vehicles")
-        rows = cursor.fetchall()
-        conn.close()
+    # def get(self, request):
+    #     """GET /api/vehicles - List all vehicles"""
+    #     conn = self.get_connection()
+    #     cursor = conn.cursor()
+    #     cursor.execute("SELECT * FROM vehicles")
+    #     rows = cursor.fetchall()
+    #     conn.close()
 
-        vehicles = [Vehicle.from_db_row(row) for row in rows]
-        return 200, {
-            "data": [v.to_dict() for v in vehicles],
-            "message": "Vehicle fetched Successfully",
-        }
+    #     vehicles = [Vehicle.from_db_row(row) for row in rows]
+    #     return 200, {
+    #         "data": [v.to_dict() for v in vehicles],
+    #         "message": "Vehicle fetched Successfully",
+    #     }
+    table_name = "vehicles"
+    model_class = Vehicle
 
 
 class VehicleCreateApiView(BaseCreateApiView):
