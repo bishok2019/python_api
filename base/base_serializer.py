@@ -2,8 +2,14 @@ import json
 from datetime import datetime
 from typing import List
 
+
 class BaseSerializer:
-    def __init__(self, instance, include_fields: List[str] = None, exclude_fields: List[str] = None):
+    def __init__(
+        self,
+        instance,
+        include_fields: List[str] = None,
+        exclude_fields: List[str] = None,
+    ):
         """
         :param instance: The model instance or list of instances
         :param include_fields: Only include these fields

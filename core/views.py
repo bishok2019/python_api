@@ -1,12 +1,11 @@
-from core.models import User, Vehicle
-from core.serializers import UserSerializer, VehicleSerializer
-
-from ..base import (
+from base import (
     BaseCreateApiView,
     BaseListApiView,
     BaseRetrieveApiView,
     BaseUpdateApiView,
 )
+from core.models import User, Vehicle
+from core.serializers import UserSerializer, VehicleSerializer
 
 
 class VehicleListApiView(BaseListApiView):
@@ -44,7 +43,14 @@ class VehicleCreateApiView(BaseCreateApiView):
         vehicle_id = cursor.lastrowid
         conn.close()
 
-        return 201, {"id": vehicle_id, "message": "Vehicle created"}
+        return 201, {
+            "data": [
+                {
+                    "id": vehicle_id,
+                }
+            ],
+            "message": "Vehicle created",
+        }
 
 
 class VehicleRetrieveApiView(BaseRetrieveApiView):
@@ -60,7 +66,10 @@ class VehicleRetrieveApiView(BaseRetrieveApiView):
 
         if row:
             vehicle = Vehicle.from_db_row(row)
-            return 200, vehicle.to_dict()
+            return 200, {
+                "data": [vehicle.to_dict()],
+                "message": "Vehicle retrieved successfully",
+            }
         return 404, {"error": "Vehicle not found"}
 
 
